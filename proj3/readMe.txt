@@ -1,0 +1,21 @@
+For this assigment I realized I had to do a few things as I was going through due to errors. The setenv and history commands were my biggest hurdles. Before that however I had initially wrote all of them commands which was more straightforward than I thought it would be. This is why I had to go back and revise some of my ideas however. 
+
+I'll start with env and my thought process. I learned I needed to use the extren declaration which essentially gives you all of the environment variables right away and allowed me to store them into a global variable to access at any point. extern is defined by unistd.h and declared at runtime. This allowed me to manipulate the environment variables and store them which is exactly what I did in my main function. I had a for loop just just stored all these variables into an array called environment. From there it was easy to just print them out. I did however encounter an issue that made me have to modify my env command. My setenv command will create a blank variable. I would definitely say I am still having some issues here as if I do too many setenv and then try to do env it creates a segfault. I have been trying to debug this, but am struggling to see where the issue lies. It may have something to do with my testing on WSL rather than the server.
+
+setenv does as it's meant to and reads the arguments then setting the enviorment variable and value if it were not missing. It sets any variable value correctly. I actually noticed later on through more testing that a problem seems to lie in the first use of setenv that it places a random env variable and value into the environment variables list. I think this may be the source of the segfault I had found with env. I can make any number of variables, but there is some bug specific to the first run of setenv.
+
+unsetenv also works as intended. realistically just removing any variable if no value is present.
+
+My logic for history was to have it iterate through and then at a count of 500, clear the oldest command line in history. This worked fine, but I had a funny problem with this. I realized I eneeded to add a string builder helper function to concatenate the command line arguments into one string. strdup(cmdLine) was only taking the argument, but none of the values, so say "setenv guacamole cilantro" would only show up as "setenv" in the history. This was easily mitigated by passing all of the command line arguments to my helper function and calling that helper function when history was input into the commandline.
+
+cd was one of the ones that had me scratching my head because I didn't know how to test it. Eventually I realized that implementing a pwd command line argument would solve this. running pwd after cd would allow me to see my directory change easily.
+
+I gave an effort on the finding commands in PATH. It was mainly a jumble of various information I could find and I don't know how to begin testing it, so it working is a 50/50. I don't think it works because it just segfaults when I do a known command like ssh, or git. This could be due to a lack of arguments, or for git it not being a git repo? I would need more time to play with it.
+
+The pipe appears to work when I am testing it. 
+
+I/O redirection is far beyond my capabilities.
+
+Parse was something that seemed very intriguing to me and made me want to make it work. The ability to just avoid misspelling essentially would be a great benefit to someone like myself.
+
+In summary all of the commmands work apart from setenv possibly breaking the memory and the special features are the pwd and string builder helper. In reality though they were both necessary to have the program function correctly. I would have loved to have added the pwd command into cd, so it printed it after every run of cd, but hadn't thought of it. In total honesty the extra credit parts went way over my head and they were guesses for themost part. Even with the well laid out instructions I found myself lost. I would like more time to study these and hopefully implement them in the future. 
